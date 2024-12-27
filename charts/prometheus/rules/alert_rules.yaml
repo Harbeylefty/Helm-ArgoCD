@@ -1,0 +1,10 @@
+groups:
+  - name: example_alerts
+    rules:
+      - alert: LowCPUUsage
+        expr: avg(rate(container_cpu_usage_seconds_total{pod=~"python-dev-environment.*"}[5m])) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: "The CPU usage of the python-dev-environment pods is low."

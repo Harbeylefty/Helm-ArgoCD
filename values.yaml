@@ -2,10 +2,40 @@ baseImage: "python:3.11-slim"
 resources:
   requests:
     memory: "512Mi"
-    cpu: "500m"
+    cpu: "10m"
 packages: "numpy,pandas"
 
 service:
   port: 80  # Ensure that the port is specified here
   targetPort: 5000
   type: ClusterIP
+
+prometheus:
+  prometheusSpec:
+    ruleSelector:
+      matchLabels:
+        alert: "LowCPUUsage"
+    rules:
+      - name: alert_rules.yaml
+
+alertmanager:
+  enabled: true
+  config:
+    global:
+      resolve_timeout: 5m  # Time to wait before resolving alerts
+    route:
+      receiver: 'slack-notifications'  # Default receiver for all alerts
+      group_by: ['alertname']  # Group alerts by name
+      group_wait: 30s  # Time to wait before sending a group of alerts
+      group_interval: 5m  # Minimum interval between groups of alerts
+      repeat_interval: 1h  # How often to resend the alert if it persists
+    receivers:
+      - name: 'slack-notifications'
+        slack_configs:
+          - channel: '#project'  # Your Slack channel name
+            send_resolved: true  # Send notification when an issue is resolved
+            api_url: 'https://hooks.slack.com/services/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'  # Your Slack webhook URL
+            text: |
+              *Alert:* {{ .CommonAnnotations.summary }}
+              *Description:* {{ .CommonAnnotations.description }}
+              *Severity:* {{ .Labels.severity }}
