@@ -1,0 +1,5 @@
+apiVersion: v2   # Helm chart version, use v2 if using Helm 3
+name: python-dev-environment   # The name of your chart
+description: A Helm chart for a Python development environment
+version: 0.1.0   # The chart version
+appVersion: "3.11"   # The version of the application (for example, Python version)
