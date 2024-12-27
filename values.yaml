@@ -1,0 +1,8 @@
+# values.yaml
+
+baseImage: "python:3.11-slim"  # Default base image
+resources:
+  requests:
+    memory: "512Mi"  # Default memory request
+    cpu: "500m"  # Default CPU request
+packages: "numpy,pandas"  # Default packages to install

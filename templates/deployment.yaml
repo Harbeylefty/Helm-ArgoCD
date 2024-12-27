@@ -1,0 +1,35 @@
+# templates/deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-dev-environment
+  labels:
+    app: python-dev-environment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-dev-environment
+  template:
+    metadata:
+      labels:
+        app: python-dev-environment
+    spec:
+      containers:
+      - name: python-container
+        image: "{{ .Values.baseImage }}"  # Use dynamic base image from values.yaml
+        resources:
+          requests:
+            memory: "{{ .Values.resources.requests.memory }}"  # Dynamic memory request
+            cpu: "{{ .Values.resources.requests.cpu }}"  # Dynamic CPU request
+        env:
+          - name: PACKAGES
+            value: "{{ .Values.packages }}"  # Dynamic packages
+        command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            pip install --upgrade pip
+            pip install $(echo $PACKAGES | tr ',' '\n')
+            exec python3
