@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: python-dev-environment
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: default
+    server: https://kubernetes.default.svc
+  source:
+    path: '.'
+    repoURL: https://github.com/Harbeylefty/Helm-ArgoCD.git
+    targetRevision: HEAD
+  project: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
