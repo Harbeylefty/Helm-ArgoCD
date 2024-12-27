@@ -1,4 +1,3 @@
-# templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,11 +26,21 @@ spec:
               cpu: "{{ .Values.resources.limits.cpu }}"
           ports:
             - containerPort: 3000  # Node.js default port
+          env:
+            - name: PACKAGES
+              value: "{{ .Values.dependencies | join \",\" }}"
           command:
             - "/bin/sh"
             - "-c"
             - |
-              # Install dependencies
-              npm install {{ .Values.dependencies | join " " }}
-              # Start the Node.js app
+              # Create package.json if it doesn't exist
+              if [ ! -f "/app/package.json" ]; then
+                echo '{"dependencies":{}}' > /app/package.json  # Create empty dependencies object
+              fi
+              # Install dependencies dynamically from the list of packages
+              DEPENDENCIES=$(echo $PACKAGES | tr ',' '\n')
+              for DEP in $DEPENDENCIES; do
+                npm install $DEP --save
+              done
+              # Start the Node app
               npm start
