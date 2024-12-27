@@ -15,8 +15,20 @@ prometheus:
     ruleSelector:
       matchLabels:
         alert: "LowCPUUsage"
+    additionalScrapeConfigs:
+      - job_name: 'python-app'
+        static_configs:
+          - targets: ['python-dev-environment:5000']
     rules:
-      - name: alert_rules.yaml
+      - name: low-cpu-usage-rule
+        alert: LowCPUUsage
+        expr: avg(rate(container_cpu_usage_seconds_total{pod=~"python-dev-environment.*"}[5m])) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          description: "The CPU usage of the python-dev-environment pods is low."
+
 
 alertmanager:
   enabled: true
