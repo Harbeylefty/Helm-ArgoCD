@@ -1,5 +1,7 @@
-apiVersion: v2   # Helm chart version, use v2 if using Helm 3
-name: python-dev-environment   # The name of your chart
-description: A Helm chart for a Python development environment
-version: 0.1.0   # The chart version
-appVersion: "3.11"   # The version of the application (for example, Python version)
+# Chart.yaml
+apiVersion: v2
+name: node-dev-environment  # Consider renaming to node-dev-environment
+description: A Helm chart for Node.js development environment
+type: application
+version: 1.0.0
+appVersion: "22-alpine"

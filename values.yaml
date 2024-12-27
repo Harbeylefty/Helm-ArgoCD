@@ -1,8 +1,25 @@
 # values.yaml
 
-baseImage: "python:3.11"  # Default base image
+image:
+  repository: node
+  tag: "22-alpine"  # Node.js version 18
+
 resources:
   requests:
-    memory: "512Mi"  # Default memory request
-    cpu: "500m"  # Default CPU request
-packages: "numpy,pandas"  # Default packages to install
+    memory: "512Mi"
+    cpu: "500m"
+  limits:
+    memory: "1Gi"
+    cpu: "1"
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 3000
+  nodePort: 30100
+
+replicaCount: 1
+
+ingress:
+  enabled: false
+  # Add ingress configuration if you need DNS handling
