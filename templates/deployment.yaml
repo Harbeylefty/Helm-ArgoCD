@@ -30,6 +30,9 @@ spec:
           - "/bin/sh"
           - "-c"
           - |
+            # Create and activate a virtual environment
+            python3 -m venv /venv
+            source /venv/bin/activate
             pip install --upgrade pip
             pip install $(echo $PACKAGES | tr ',' '\n')
             exec python3
