@@ -44,9 +44,9 @@ alertmanager:
     receivers:
       - name: 'slack-notifications'
         slack_configs:
-          - channel: '#project'  # Your Slack channel name
+          - channel: '#all-harbey'  # Your Slack channel name
             send_resolved: true  # Send notification when an issue is resolved
-            api_url: 'https://hooks.slack.com/services/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'  # Your Slack webhook URL
+            api_url: 'https://hooks.slack.com/services/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'  # Your Slack webhook URL
             text: |
               *Alert:* {{ .CommonAnnotations.summary }}
               *Description:* {{ .CommonAnnotations.description }}
