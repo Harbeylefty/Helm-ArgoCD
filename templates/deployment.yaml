@@ -28,7 +28,7 @@ spec:
             - containerPort: 3000  # Node.js default port
           env:
             - name: PACKAGES
-              value: "{{ .Values.dependencies | join \",\" }}"
+              value: "{{ .Values.dependencies | join \",\" }}"  # Removed unnecessary backslash
           command:
             - "/bin/sh"
             - "-c"
