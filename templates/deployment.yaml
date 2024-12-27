@@ -30,11 +30,12 @@ spec:
             - name: PACKAGES
               value: "{{ .Values.dependencies }}"  # Directly pass the list of dependencies
           command:
-            - "/bin/bash"
+            - "/bin/sh"
             - "-c"
             - |
-              # Iterate through dependencies and install them
-              for DEP in "${PACKAGES[@]}"; do
+              # Split the PACKAGES string into an array of dependencies
+              DEPENDENCIES=$(echo $PACKAGES | tr ',' '\n')
+              for DEP in $DEPENDENCIES; do
                 pip install $DEP  # Install each package
               done
 
