@@ -2,3 +2,4 @@ apiVersion: v2
 name: python-app
 description: A Python web application
 version: 0.1.0
+appVersion: "3.11"
