@@ -3,4 +3,9 @@ resources:
   requests:
     memory: "512Mi"
     cpu: "500m"
-packages: "numpy,pandas"  # List of packages to install dynamically
+packages: "numpy,pandas"
+
+service:
+  port: 80  # Ensure that the port is specified here
+  targetPort: 5000
+  type: ClusterIP

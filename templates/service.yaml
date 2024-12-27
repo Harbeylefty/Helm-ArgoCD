@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: python-app-service
+  name: python-dev-environment
 spec:
   selector:
-    app: python-app
+    app: python-dev-environment
   ports:
     - protocol: TCP
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
+  type: {{ .Values.service.type }}
