@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-dev-environment
+  name: python-app
   labels:
-    app: node-dev-environment
+    app: python-app
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: node-dev-environment
+      app: python-app
   template:
     metadata:
       labels:
-        app: node-dev-environment
+        app: python-app
     spec:
       containers:
-        - name: node-container
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"  # Node.js image
+        - name: python-container
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           resources:
             requests:
               memory: "{{ .Values.resources.requests.memory }}"
@@ -25,22 +25,27 @@ spec:
               memory: "{{ .Values.resources.limits.memory }}"
               cpu: "{{ .Values.resources.limits.cpu }}"
           ports:
-            - containerPort: 3000  # Node.js default port
+            - containerPort: 5000  # Flask default port
           env:
             - name: PACKAGES
-              value: "{{ .Values.dependencies | join \",\" }}"  # Removed unnecessary backslash
+              value: "{{ .Values.dependencies }}"  # Pass the list of dependencies from values.yaml
           command:
             - "/bin/sh"
             - "-c"
             - |
-              # Create package.json if it doesn't exist
-              if [ ! -f "/app/package.json" ]; then
-                echo '{"dependencies":{}}' > /app/package.json  # Create empty dependencies object
-              fi
-              # Install dependencies dynamically from the list of packages
-              DEPENDENCIES=$(echo $PACKAGES | tr ',' '\n')
-              for DEP in $DEPENDENCIES; do
-                npm install $DEP --save
+              # Install dependencies dynamically from the list in values.yaml
+              for DEP in ${PACKAGES[@]}; do
+                pip install $DEP
               done
-              # Start the Node app
-              npm start
+
+              # Create a simple Flask app dynamically
+              echo "from flask import Flask" > /app.py
+              echo "app = Flask(__name__)" >> /app.py
+              echo "@app.route('/')" >> /app.py
+              echo "def hello_world():" >> /app.py
+              echo "    return 'Hello, World!'" >> /app.py
+              echo "if __name__ == '__main__':" >> /app.py
+              echo "    app.run(host='0.0.0.0', port=5000)" >> /app.py
+
+              # Start the Flask app
+              python3 /app.py

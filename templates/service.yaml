@@ -1,13 +1,11 @@
-# templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-dev-service
+  name: python-app-service
 spec:
   selector:
-    app: node-dev-environment
+    app: python-app
   ports:
     - protocol: TCP
       port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
-      nodePort: {{ .Values.service.nodePort }}

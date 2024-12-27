@@ -1,7 +1,4 @@
-# Chart.yaml
 apiVersion: v2
-name: node-dev-environment  # Consider renaming to node-dev-environment
-description: A Helm chart for Node.js development environment
-type: application
-version: 1.0.0
-appVersion: "22-alpine"
+name: python-app
+description: A Python web application
+version: 0.1.0

@@ -1,8 +1,6 @@
-# values.yaml
-
 image:
-  repository: node
-  tag: "22-alpine"  # Node.js version 18
+  repository: python
+  tag: "3.11-slim"  # Python version 3.11
 
 resources:
   requests:
@@ -12,20 +10,18 @@ resources:
     memory: "1Gi"
     cpu: "1"
 
+replicaCount: 1
+
+# Dependencies specified here (just like we did earlier)
+dependencies:
+  - flask
+  - numpy
+  - pandas
+
 service:
   type: ClusterIP
   port: 80
-  targetPort: 3000
-  nodePort: 30100
-
-replicaCount: 1
-
-dependencies:
-  - express
-  - axios
-  - mongoose
-  
+  targetPort: 5000
 
 ingress:
   enabled: false
-  # Add ingress configuration if you need DNS handling
