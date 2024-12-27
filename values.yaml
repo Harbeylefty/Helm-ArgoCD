@@ -20,6 +20,12 @@ service:
 
 replicaCount: 1
 
+dependencies:
+  - express
+  - axios
+  - mongoose
+  
+
 ingress:
   enabled: false
   # Add ingress configuration if you need DNS handling

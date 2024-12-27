@@ -32,6 +32,6 @@ spec:
             - "-c"
             - |
               # Install dependencies
-              npm install
+              npm install $(echo $PACKAGES | tr ',' ' ')
               # Start the Node.js app
               npm start
