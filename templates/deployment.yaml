@@ -28,14 +28,14 @@ spec:
             - containerPort: 5000  # Flask default port
           env:
             - name: PACKAGES
-              value: "{{ .Values.dependencies }}"  # Pass the list of dependencies from values.yaml
+              value: "{{ .Values.dependencies }}"  # Directly pass the list of dependencies
           command:
-            - "/bin/bash"
+            - "/bin/sh"
             - "-c"
             - |
-              # Install dependencies dynamically from the list in values.yaml
-              for DEP in ${PACKAGES[@]}; do
-                pip install $DEP
+              # Iterate through dependencies and install them
+              for DEP in "${PACKAGES[@]}"; do
+                pip install $DEP  # Install each package
               done
 
               # Create a simple Flask app dynamically

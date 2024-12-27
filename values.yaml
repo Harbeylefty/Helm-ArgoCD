@@ -1,6 +1,6 @@
 image:
   repository: python
-  tag: "3.11-slim"  # Python version 3.11
+  tag: "3.11-slim"
 
 resources:
   requests:
@@ -12,7 +12,6 @@ resources:
 
 replicaCount: 1
 
-# Dependencies specified here (just like we did earlier)
 dependencies:
   - flask
   - numpy
@@ -25,3 +24,4 @@ service:
 
 ingress:
   enabled: false
+  # Add ingress configuration if needed
