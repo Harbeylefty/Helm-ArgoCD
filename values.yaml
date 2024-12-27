@@ -1,25 +1,6 @@
-image:
-  repository: python
-  tag: "3.11-slim"
-
+baseImage: "python:3.11-slim"
 resources:
   requests:
     memory: "512Mi"
     cpu: "500m"
-  limits:
-    memory: "1Gi"
-    cpu: "1"
-
-replicaCount: 1
-
-dependencies:
-  - numpy
-  - pandas
-
-service:
-  type: ClusterIP
-  port: 80
-  targetPort: 5000
-
-ingress:
-  enabled: false
+packages: "numpy,pandas"  # List of packages to install dynamically

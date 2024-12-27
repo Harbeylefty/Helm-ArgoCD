@@ -1,49 +1,42 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: python-app
+  name: python-dev-environment
   labels:
-    app: python-app
+    app: python-dev-environment
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: 1
   selector:
     matchLabels:
-      app: python-app
+      app: python-dev-environment
   template:
     metadata:
       labels:
-        app: python-app
+        app: python-dev-environment
     spec:
       containers:
-        - name: python-container
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          resources:
-            requests:
-              memory: "{{ .Values.resources.requests.memory }}"
-              cpu: "{{ .Values.resources.requests.cpu }}"
-            limits:
-              memory: "{{ .Values.resources.limits.memory }}"
-              cpu: "{{ .Values.resources.limits.cpu }}"
-          ports:
-            - containerPort: 5000  # No need to use Flask, can just expose the container port
-          env:
-            - name: PACKAGES
-              value: "{{ .Values.dependencies }}"  # Directly pass the list of dependencies
-          command:
-            - "/bin/sh"
-            - "-c"
-            - |
-              # Split the PACKAGES string into an array of dependencies
-              DEPENDENCIES=$(echo $PACKAGES | tr ',' '\n')
-              for DEP in $DEPENDENCIES; do
-                pip install $DEP  # Install each package
-              done
+      - name: python-container
+        image: "{{ .Values.baseImage }}"  # Dynamic base image
+        resources:
+          requests:
+            memory: "{{ .Values.resources.requests.memory }}"  # Dynamic memory request
+            cpu: "{{ .Values.resources.requests.cpu }}"  # Dynamic CPU request
+        env:
+          - name: PACKAGES
+            value: "{{ .Values.packages }}"  # Dynamic package list
+        command:
+          - "/bin/sh"
+          - "-c"
+          - |
+            # Upgrade pip and install packages dynamically from the environment variable
+            pip install --upgrade pip
+            pip install $(echo $PACKAGES | tr ',' ' ')
+            
+            # Create a simple Python script dynamically
+            echo "import time" > /app.py
+            echo "while True:" >> /app.py
+            echo "    print('Hello, World!')" >> /app.py
+            echo "    time.sleep(5)" >> /app.py
 
-              # Run a simple Python script without Flask
-              echo "import time" > /app.py
-              echo "while True:" >> /app.py
-              echo "    print('Hello, World!')" >> /app.py
-              echo "    time.sleep(5)" >> /app.py
-
-              # Start the Python script
-              python3 /app.py
+            # Run the Python script
+            exec python3 /app.py
