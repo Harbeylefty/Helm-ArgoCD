@@ -18,7 +18,7 @@ prometheus:
     additionalScrapeConfigs:
       - job_name: 'python-app'
         static_configs:
-          - targets: ['python-dev-environment:5000']
+          - targets: ['python-dev-environment:80']
     rules:
       - name: low-cpu-usage-rule
         alert: LowCPUUsage
@@ -44,9 +44,9 @@ alertmanager:
     receivers:
       - name: 'slack-notifications'
         slack_configs:
-          - channel: '#all-harbey'  # Your Slack channel name
+          - channel: '#all-harbey'
             send_resolved: true  # Send notification when an issue is resolved
-            api_url: 'https://hooks.slack.com/services/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'  # Your Slack webhook URL
+            api_url: 'https://hooks.slack.com/services/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'  
             text: |
               *Alert:* {{ .CommonAnnotations.summary }}
               *Description:* {{ .CommonAnnotations.description }}
