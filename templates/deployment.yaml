@@ -25,7 +25,7 @@ spec:
               memory: "{{ .Values.resources.limits.memory }}"
               cpu: "{{ .Values.resources.limits.cpu }}"
           ports:
-            - containerPort: 5000  # Flask default port
+            - containerPort: 5000  # No need to use Flask, can just expose the container port
           env:
             - name: PACKAGES
               value: "{{ .Values.dependencies }}"  # Directly pass the list of dependencies
@@ -39,14 +39,11 @@ spec:
                 pip install $DEP  # Install each package
               done
 
-              # Create a simple Flask app dynamically
-              echo "from flask import Flask" > /app.py
-              echo "app = Flask(__name__)" >> /app.py
-              echo "@app.route('/')" >> /app.py
-              echo "def hello_world():" >> /app.py
-              echo "    return 'Hello, World!'" >> /app.py
-              echo "if __name__ == '__main__':" >> /app.py
-              echo "    app.run(host='0.0.0.0', port=5000)" >> /app.py
+              # Run a simple Python script without Flask
+              echo "import time" > /app.py
+              echo "while True:" >> /app.py
+              echo "    print('Hello, World!')" >> /app.py
+              echo "    time.sleep(5)" >> /app.py
 
-              # Start the Flask app
+              # Start the Python script
               python3 /app.py

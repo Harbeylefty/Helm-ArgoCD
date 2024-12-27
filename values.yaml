@@ -13,7 +13,6 @@ resources:
 replicaCount: 1
 
 dependencies:
-  - flask
   - numpy
   - pandas
 
@@ -24,4 +23,3 @@ service:
 
 ingress:
   enabled: false
-  # Add ingress configuration if needed
