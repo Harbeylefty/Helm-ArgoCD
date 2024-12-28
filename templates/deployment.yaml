@@ -6,7 +6,7 @@ metadata:
     app: python-dev-environment
   annotations:
     prometheus.io/scrape: "true"  # Tells Prometheus to scrape this app's metrics
-    prometheus.io/port: "80" 
+    prometheus.io/port: "5000" 
 spec:
   replicas: 1
   selector:
