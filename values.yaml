@@ -39,14 +39,6 @@ prometheus:
                   summary: "Memory usage is under 50MB."
                   description: "Memory usage of python-dev-environment pods is below 50MB."
 
-alertmanager:
-  enabled: true
-  alertmanagerSpec:
-    alertmanagerConfigNamespaceSelector: {}
-    alertmanagerConfigSelector:
-      matchLabels:
-        alertmanager: enabled
-
 
 
 
