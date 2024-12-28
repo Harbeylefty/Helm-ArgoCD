@@ -6,7 +6,7 @@ resources:
 packages: "numpy,pandas"
 
 service:
-  port: 80  # Ensure that the port is specified here
+  port: 80  
   targetPort: 5000
   type: NodePort
   nodePort: 30100
