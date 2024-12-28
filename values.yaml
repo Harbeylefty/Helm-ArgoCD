@@ -10,36 +10,6 @@ service:
   targetPort: 5000
   type: ClusterIP
 
-prometheus:
-  prometheusSpec:
-    # Scraping additional targets (your Python app's metrics endpoint)
-    additionalScrapeConfigs:
-      - job_name: 'python-app'
-        static_configs:
-          - targets: ['python-dev-environment:5000']  # Ensure your app exposes metrics here
-
-    # Define alert rules directly within the values.yaml
-    additionalPrometheusRules:
-      - groups:
-          - name: resource-alerts
-            rules:
-              - alert: LowCPUUsage
-                expr: avg(rate(container_cpu_usage_seconds_total{pod=~"python-dev-environment.*"}[5m])) < 0.1
-                labels:
-                  severity: warning
-                annotations:
-                  summary: "CPU usage is under 10% for the last 5 minutes."
-                  description: "The CPU usage of the python-dev-environment pods is low."
-
-              - alert: LowMemoryUsage
-                expr: sum(container_memory_usage_bytes{pod=~"python-dev-environment.*"}) < 50 * 1024 * 1024
-                labels:
-                  severity: warning
-                annotations:
-                  summary: "Memory usage is under 50MB."
-                  description: "Memory usage of python-dev-environment pods is below 50MB."
-
-
 
 
 
