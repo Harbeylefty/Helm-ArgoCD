@@ -3,10 +3,7 @@ kind: Deployment
 metadata:
   name: python-dev-environment
   labels:
-    app: python-dev-environment
-  annotations:
-    prometheus.io/scrape: "true"  # Tells Prometheus to scrape this app's metrics
-    prometheus.io/port: "5000" 
+    app: python-dev-environment 
 spec:
   replicas: 1
   selector:

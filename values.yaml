@@ -8,47 +8,9 @@ packages: "numpy,pandas"
 service:
   port: 80  
   targetPort: 5000
-  type: NodePort
-  nodePort: 30100
-
-prometheus:
-  prometheusSpec:
-    ruleSelector:
-      matchLabels:
-        alert: "LowCPUUsage"
-    additionalScrapeConfigs:
-      - job_name: 'python-app'
-        static_configs:
-          - targets: ['python-dev-environment:80']
-    rules:
-      - name: low-cpu-usage-rule
-        alert: LowCPUUsage
-        expr: avg(rate(container_cpu_usage_seconds_total{pod=~"python-dev-environment.*"}[5m])) < 0.1
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          description: "The CPU usage of the python-dev-environment pods is low."
+  type: ClusterIP
 
 
-alertmanager:
-  enabled: true
-  config:
-    global:
-      resolve_timeout: 5m  # Time to wait before resolving alerts
-    route:
-      receiver: 'slack-notifications'  # Default receiver for all alerts
-      group_by: ['alertname']  # Group alerts by name
-      group_wait: 30s  # Time to wait before sending a group of alerts
-      group_interval: 5m  # Minimum interval between groups of alerts
-      repeat_interval: 1h  # How often to resend the alert if it persists
-    receivers:
-      - name: 'slack-notifications'
-        slack_configs:
-          - channel: '#all-harbey'
-            send_resolved: true  # Send notification when an issue is resolved
-            api_url: 'https://hooks.slack.com/services/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'  
-            text: |
-              *Alert:* {{ .CommonAnnotations.summary }}
-              *Description:* {{ .CommonAnnotations.description }}
-              *Severity:* {{ .Labels.severity }}
+
+
+
