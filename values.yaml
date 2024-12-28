@@ -10,30 +10,43 @@ service:
   targetPort: 5000
   type: ClusterIP
 
-
 prometheus:
   prometheusSpec:
-    # Optional: Use 'ruleSelector' if you're applying specific labels, or remove it if not needed.
-    ruleSelector:
-      matchLabels:
-        alert: "LowCPUUsage"
-
-    # Scraping additional targets (if your Python app exposes metrics at this endpoint)
+    # Scraping additional targets (your Python app's metrics endpoint)
     additionalScrapeConfigs:
       - job_name: 'python-app'
         static_configs:
-          - targets: ['python-dev-environment:5000']
+          - targets: ['python-dev-environment:5000']  # Ensure your app exposes metrics here
 
-    # Define alert rules directly
-    rules:
-      - name: low-cpu-usage-rule
-        alert: LowCPUUsage
-        expr: avg(rate(container_cpu_usage_seconds_total{pod=~"python-dev-environment.*"}[5m])) < 0.1
-        labels:
-          severity: warning
-        annotations:
-          description: "The CPU usage of the python-dev-environment pods is low."
-          summary: "CPU usage is under 10% for the last 5 minutes."
+    # Define alert rules directly within the values.yaml
+    additionalPrometheusRules:
+      - groups:
+          - name: resource-alerts
+            rules:
+              - alert: LowCPUUsage
+                expr: avg(rate(container_cpu_usage_seconds_total{pod=~"python-dev-environment.*"}[5m])) < 0.1
+                labels:
+                  severity: warning
+                annotations:
+                  summary: "CPU usage is under 10% for the last 5 minutes."
+                  description: "The CPU usage of the python-dev-environment pods is low."
+
+              - alert: LowMemoryUsage
+                expr: sum(container_memory_usage_bytes{pod=~"python-dev-environment.*"}) < 50 * 1024 * 1024
+                labels:
+                  severity: warning
+                annotations:
+                  summary: "Memory usage is under 50MB."
+                  description: "Memory usage of python-dev-environment pods is below 50MB."
+
+alertmanager:
+  enabled: true
+  alertmanagerSpec:
+    alertmanagerConfigNamespaceSelector: {}
+    alertmanagerConfigSelector:
+      matchLabels:
+        alertmanager: enabled
+
 
 
 
