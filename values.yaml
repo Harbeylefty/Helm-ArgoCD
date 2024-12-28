@@ -11,29 +11,7 @@ service:
   type: ClusterIP
 
 
-prometheus:
-  prometheusSpec:
-    # Optional: Use 'ruleSelector' if you're applying specific labels, or remove it if not needed.
-    ruleSelector:
-      matchLabels:
-        alert: "LowCPUUsage"
 
-    # Scraping additional targets (if your Python app exposes metrics at this endpoint)
-    additionalScrapeConfigs:
-      - job_name: 'python-app'
-        static_configs:
-          - targets: ['python-dev-environment:5000']
-
-    # Define alert rules directly
-    rules:
-      - name: low-cpu-usage-rule
-        alert: LowCPUUsage
-        expr: avg(rate(container_cpu_usage_seconds_total{pod=~"python-dev-environment.*"}[5m])) < 0.1
-        labels:
-          severity: warning
-        annotations:
-          description: "The CPU usage of the python-dev-environment pods is low."
-          summary: "CPU usage is under 10% for the last 5 minutes."
 
 
 
