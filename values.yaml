@@ -2,7 +2,7 @@ baseImage: "python:3.11-slim"
 resources:
   requests:
     memory: "512Mi"
-    cpu: "10m"
+    cpu: "500m"
 packages: "numpy,pandas"
 
 service:
