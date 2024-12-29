@@ -21,6 +21,9 @@ spec:
           requests:
             memory: "{{ .Values.resources.requests.memory }}"  # Dynamic memory request
             cpu: "{{ .Values.resources.requests.cpu }}"  # Dynamic CPU request
+          limits:
+            memory: "1Gi"
+            cpu: "100m"
         env:
           - name: PACKAGES
             value: "{{ .Values.packages }}"  # Dynamic package list
