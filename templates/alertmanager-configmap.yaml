@@ -12,15 +12,9 @@ data:
     receivers:
       - name: 'slack-notifications'
         slack_configs:
-          - api_url: 'https://hooks.slack.com/services/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'   
-            channel: '#all-harbey'   
+          - api_url: 'https://hooks.slack.com/services/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'   # Replace with your actual Slack webhook URL
+            channel: '#all-harbey'   # Specify your Slack channel
             send_resolved: true
     templates:
-      - '{{ .CommonAnnotations.summary | default "Default summary" }}'
-      - '{{ .CommonAnnotations.description | default "Default description" }}'
-
-
-
-
-
-
+      - '{{ .Values.CommonAnnotations.summary | default "Default summary" }}'
+      - '{{ .Values.CommonAnnotations.description | default "Default description" }}'
