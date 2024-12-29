@@ -13,13 +13,13 @@ data:
         labels:
           severity: {{ .Values.alerts.severity }}
         annotations:
-          summary: "CPU underutilized in pod {{ $labels.pod }}"
-          description: "Pod {{ $labels.pod }} is underutilizing CPU."
+          summary: "CPU underutilized in the pod"
+          description: "The pod is underutilizing CPU resources."
       - alert: UnderutilizedMemory
         expr: (sum(container_memory_working_set_bytes{image!=""}) by (pod) / sum(kube_pod_container_resource_requests_memory_bytes) by (pod)) < {{ .Values.alerts.memoryUtilizationThreshold }}
         for: {{ .Values.alerts.duration }}
         labels:
           severity: {{ .Values.alerts.severity }}
         annotations:
-          summary: "Memory underutilized in pod {{ $labels.pod }}"
-          description: "Pod {{ $labels.pod }} is underutilizing memory."
+          summary: "Memory underutilized in the pod"
+          description: "The pod is underutilizing memory resources."
