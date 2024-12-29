@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-rules
+data:
+  underutilization.rules.yaml: |
+    groups:
+    - name: underutilization.rules
+      rules:
+      - alert: UnderutilizedCPU
+        expr: (sum(rate(container_cpu_usage_seconds_total{image!=""}[5m])) by (pod) / sum(kube_pod_container_resource_requests_cpu_cores) by (pod)) < {{ .Values.alerts.cpuUtilizationThreshold }}
+        for: {{ .Values.alerts.duration | default "5m" }}
+        labels:
+          severity: {{ .Values.alerts.severity }}
+        annotations:
+          summary: "CPU underutilized in pod {{ $labels.pod }}"
+          description: "Pod {{ $labels.pod }} is underutilizing CPU."
+      - alert: UnderutilizedMemory
+        expr: (sum(container_memory_working_set_bytes{image!=""}) by (pod) / sum(kube_pod_container_resource_requests_memory_bytes) by (pod)) < {{ .Values.alerts.memoryUtilizationThreshold }}
+        for: {{ .Values.alerts.duration }}
+        labels:
+          severity: {{ .Values.alerts.severity }}
+        annotations:
+          summary: "Memory underutilized in pod {{ $labels.pod }}"
+          description: "Pod {{ $labels.pod }} is underutilizing memory."

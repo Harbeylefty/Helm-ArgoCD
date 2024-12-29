@@ -10,6 +10,14 @@ service:
   targetPort: 5000
   type: ClusterIP
 
+alerts:
+  cpuUtilizationThreshold: 0.2        # CPU underutilization threshold (20%)
+  memoryUtilizationThreshold: 0.2     # Memory underutilization threshold (20%)
+  duration: "5m"                     # Duration for the condition to persist before alerting
+  severity: "warning" 
+
+alertmanager:
+  configMapOverrideName: alertmanager-config  # Name of the ConfigMap created above
 
 
 

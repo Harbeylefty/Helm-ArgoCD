@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager-config
+  labels:
+    app: alertmanager
+data:
+  alertmanager.yml: |
+    route:
+      receiver: slack_notifications
+    receivers:
+      - name: slack_notifications
+        slack_configs:
+          - api_url: 'https://hooks.slack.com/services/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'
+            channel: '#all-harbey'
+            send_resolved: true
+            text: "Alert: {{ .CommonAnnotations.summary }} \nDescription: {{ .CommonAnnotations.description }}"
