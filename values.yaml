@@ -19,5 +19,8 @@ alerts:
 alertmanager:
   configMapOverrideName: alertmanager-config  # Name of the ConfigMap created above
 
+CommonAnnotations:
+  summary: "This is the summary for the alert."
+  description: "Detailed description of the alert."
 
 
