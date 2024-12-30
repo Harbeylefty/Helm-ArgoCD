@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: node-dev-environment
+  name: python-dev-environment
   namespace: argocd
 spec:
   destination:
